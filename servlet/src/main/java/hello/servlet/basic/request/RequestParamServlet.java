@@ -26,6 +26,10 @@ public class RequestParamServlet extends HttpServlet {
         System.out.println("[전체 파라미터 조회] - end");
         System.out.println();
 
+        //getParameter 는 GET 방식의 URL 쿼리 파라미터 방식도 지원하고,
+                        //POST HTML Form 형식 둥 다 지원한다.
+                        // => 폼으로 데이터를 전송하는 형식을 application/x-www-form-urlencoded 라 한다.
+        // 간단한 form 은 Postman에서 application/x-www-form-urlencoded 로 테스트할 수 있다.
         System.out.println("[단일 파라미터 조회] - start");
         String username = request.getParameter("username");
         String age = request.getParameter("age");
