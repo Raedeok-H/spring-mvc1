@@ -1,9 +1,11 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -123,4 +125,56 @@ public class RequestParamController {
     파라미터의 값이 1개가 확실하다면 Map 을 사용해도 되지만, 그렇지 않다면 MultiValueMap 을 사용하자.
     근데 거의 1개 쓴다.
     * */
+
+
+    /**
+     * @ResponseBody
+     *     @RequestMapping("/model-attribute-v1")
+     *     public String modelAttributeV1(@RequestParam String username, @RequestParam int age) {
+     *         HelloData helloData = new HelloData();
+     *         helloData.setUsername(username);
+     *         helloData.setAge(age);
+     *
+     *         log.info("username:{}, age:{}", helloData.getUsername(), helloData.getAge());
+     *         log.info("helloData={}", helloData); // toString() 메소드를 사용
+     *
+     *         return "ok";
+     *     }
+     * @ModelAttribute 사용
+     * 참고: model.addAttribute(helloData) 코드도 함께 자동 적용됨, 뒤에 model을 설명할 때 자세히 설명
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("username:{}, age:{}", helloData.getUsername(), helloData.getAge());
+        log.info("helloData={}", helloData); // toString() 메소드를 사용
+
+        return "ok";
+    }
+    // 바인딩 오류
+    // age=abc 처럼 숫자가 들어가야 할 곳에 문자를 넣으면 BindException 이 발생한다.
+    // 이런 바인딩 오류를 처리하는 방법은 검증 부분에서 다룬다
+
+
+
+
+    /**
+     * @ModelAttribute 생략 가능
+     *
+     * 스프링에서 아래처럼 처리한다.
+     * String, int 같은 단순 타입 = @RequestParam 으로 사용
+     * argument resolver 로 지정해둔 타입 외 = @ModelAttribute 으로 사용
+     *
+     * argument resolver -> HttpServletRequest 같은 것임
+     * 기본적으로 사용자가 만든 모델의 경우 @ModelAttribute 가 적용된다고 생각하면 됨.
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return "ok";
+    }
+
+
+
 }
