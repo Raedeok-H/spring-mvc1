@@ -1,0 +1,28 @@
+** 스프링(서버)에서 응답 데이터를 만드는 방법은 크게 3가지이다.
+    1.정적 리소스
+       예) 웹 브라우저에 정적인 HTML, css, js를 제공할 때는, 정적 리소스를 사용한다.
+    2.뷰 템플릿 사용
+       예) 웹 브라우저에 동적인 HTML을 제공할 때는 뷰 템플릿을 사용한다.
+    3.HTTP 메시지 사용
+       HTTP API를 제공하는 경우에는 HTML이 아니라 데이터를 전달해야 하므로,
+       HTTP 메시지 바디에JSON 같은 형식으로 데이터를 실어 보낸다.
+
+
+** 정적 리소스
+   스프링 부트는 클래스패스의 다음 디렉토리에 있는 정적 리소스를 제공한다.
+   /static , /public , /resources , /META-INF/resources
+
+   웹 브라우저에서 위의 4가지 경로 다음부터 입력하여 실행하면 된다.
+
+
+** 뷰 템플릿(thymeleaf 사용)
+   뷰 템플릿을 거쳐서 HTML이 생성되고, 뷰가 응답을 만들어서 전달한다.
+   일반적으로 HTML을 동적으로 생성하는 용도로 사용하지만, 다른 것들도 가능하다.
+   뷰 템플릿이 만들 수 있는 것이라면 뭐든지 가능하다.
+
+   스프링 부트는 기본 뷰 템플릿 경로를 제공한다.
+   src/main/resources/templates
+
+   thymeleaf 의 스프링 설정(기본 값)
+   spring.thymeleaf.prefix=classpath:/templates/
+   spring.thymeleaf.suffix=.html
