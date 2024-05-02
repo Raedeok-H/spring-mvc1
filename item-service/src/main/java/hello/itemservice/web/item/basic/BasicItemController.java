@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class BasicItemController {
      * 단순 타입들은 @RequestParam가 적용되고,
      * 그 외는 @ModelAttribute 가 적용되는 것을 지난 시간에 학습했었다.
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         itemRepository.save(item);
         return "basic/item";
@@ -115,6 +116,21 @@ public class BasicItemController {
      * PATCH 매핑을 사용하는 방법이 있지만, HTTP 요청상 POST 요청이다.
      */
 
+
+
+    /**
+     * PRG - Post/Redirect/Get
+     * 상품 등록 후 새로고침은 마지막에 한 행위를 반복하는 것이다. -> 계속 Post 를 하는 효과
+     * 그래서 Post 후에는 Redirect 해서 다른 페이지를 get 요청하는 것과 같이 동작하게 한다.
+     */
+    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+        // "redirect:/basic/items/" + item.getId() redirect에서 +item.getId() 처럼 URL에 변수를 더해서 사용하는 것은
+        // URL 인코딩이 안되기 때문에 위험하다. 다음에 설명하는 RedirectAttributes 를 사용하자
+        // 지금은 숫자라서 괜찮지만, 한글이나, 그런 문자들은 인코딩이 안된다.
+    }
 
     /**
      * 테스트용 데이터 추가
