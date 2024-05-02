@@ -72,7 +72,7 @@ public class BasicItemController {
         return "basic/item";
     }
 
-//    @PostMapping("/add")
+    //    @PostMapping("/add")
     public String addItemV3(@ModelAttribute Item item) {
         itemRepository.save(item);
         // @ModelAttribute 안의 이름을 생략하면,
@@ -93,6 +93,28 @@ public class BasicItemController {
         itemRepository.save(item);
         return "basic/item";
     }
+
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable("itemId") Long itemId, Model model) {
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
+        return "basic/editForm";
+    }
+
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable("itemId") Long itemId, @ModelAttribute Item item) {
+        itemRepository.update(itemId, item);
+
+        return "redirect:/basic/items/{itemId}";
+    }
+    /**
+     *  ** 참고
+     * HTML Form 전송은 PUT, PATCH를 지원하지 않는다. GET, POST만 사용할 수 있다.
+     * PUT, PATCH는 HTTP API 전송시에 사용
+     * 스프링에서 HTTP POST로 Form 요청할 때 히든 필드를 통해서 PUT,
+     * PATCH 매핑을 사용하는 방법이 있지만, HTTP 요청상 POST 요청이다.
+     */
+
 
     /**
      * 테스트용 데이터 추가
