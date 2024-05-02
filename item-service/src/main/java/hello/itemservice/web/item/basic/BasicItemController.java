@@ -123,13 +123,28 @@ public class BasicItemController {
      * 상품 등록 후 새로고침은 마지막에 한 행위를 반복하는 것이다. -> 계속 Post 를 하는 효과
      * 그래서 Post 후에는 Redirect 해서 다른 페이지를 get 요청하는 것과 같이 동작하게 한다.
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV5(Item item) {
         itemRepository.save(item);
         return "redirect:/basic/items/" + item.getId();
         // "redirect:/basic/items/" + item.getId() redirect에서 +item.getId() 처럼 URL에 변수를 더해서 사용하는 것은
         // URL 인코딩이 안되기 때문에 위험하다. 다음에 설명하는 RedirectAttributes 를 사용하자
         // 지금은 숫자라서 괜찮지만, 한글이나, 그런 문자들은 인코딩이 안된다.
+    }
+
+    /**
+     * RedirectAttributes
+     *
+     * RedirectAttributes 를 사용하면 URL 인코딩도 해주고,
+     * pathVariable , 쿼리 파라미터까지 처리해준다. -> pathVariable 바인딩: {itemId}
+     * 나머지는 쿼리 파라미터로 처리: ?status=true
+     */
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}";
     }
 
     /**
